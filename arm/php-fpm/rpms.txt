@@ -6,7 +6,9 @@ php-pecl-jsonc
 php-mysqlnd
 php-gd
 php-process
-php-pecl
 php-common
 php-pdo
-
+php-mbstring
+php-mcrypt
+php-intl
+php-ldap

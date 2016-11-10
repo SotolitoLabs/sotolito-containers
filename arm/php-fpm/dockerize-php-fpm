@@ -1,6 +1,6 @@
 #/bin/bash
 
-IMAGE_VERSION=5.6.20-1
+IMAGE_VERSION=5.6.27-1
 IMAGE_NAME=sotolitolabs-cubie/php-fpm
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
@@ -39,7 +39,8 @@ dockerize -t $IMAGE_NAME \
     --add-file /usr/lib/libk5crypto.so.3  /usr/lib/libk5crypto.so.3 \
     --add-file /usr/lib/libcom_err.so.2  /usr/lib/libcom_err.so.2 \
     --add-file /usr/lib/liblber-2.4.so.2  /usr/lib/liblber-2.4.so.2 \
-    --add-file /usr/lib/libldap-2.4.so.2  /usr/lib/libldap-2.4.so.2 \
+    --add-file /usr/lib/libldap-2.4.so.2 /usr/lib/libldap-2.4.so.2 \
+    --add-file /usr/lib/libldap_r-2.4.so.2  /usr/lib/libldap_r-2.4.so.2 \
     --add-file /usr/lib/libz.so.1  /usr/lib/libz.so.1 \
     --add-file /usr/lib/libssl.so.10  /usr/lib/libssl.so.10 \
     --add-file /usr/lib/libssl3.so /usr/lib/libssl3.so\
@@ -53,35 +54,41 @@ dockerize -t $IMAGE_NAME \
     --add-file /usr/lib/libcrypt.so.1  /usr/lib/libcrypt.so.1 \
     --add-file /usr/lib/libpcre.so.1  /usr/lib/libpcre.so.1 \
     --add-file /usr/lib/libfreebl3.so  /usr/lib/libfreebl3.so \
-    --add-file /usr/lib/libt1.so.5    /lib/libt1.so.5  \
-    --add-file /usr/lib/libX11.so.6    /lib/libX11.so.6  \
-    --add-file /usr/lib/libXpm.so.4    /lib/libXpm.so.4  \
-    --add-file /usr/lib/libpng16.so.16    /lib/libpng16.so.16  \
-    --add-file /usr/lib/libz.so.1    /lib/libz.so.1  \
-    --add-file /usr/lib/libjpeg.so.62    /lib/libjpeg.so.62  \
-    --add-file /usr/lib/libvpx.so.2    /lib/libvpx.so.2  \
-    --add-file /usr/lib/libfreetype.so.6    /lib/libfreetype.so.6  \
-    --add-file /usr/lib/libgcc_s.so.1    /lib/libgcc_s.so.1  \
-    --add-file /usr/lib/libc.so.6    /lib/libc.so.6  \
-    --add-file /lib/ld-linux-armhf.so.3 /lib/ld-linux-armhf.so.3 \
-    --add-file /usr/lib/libm.so.6    /lib/libm.so.6  \
-    --add-file /usr/lib/libfontconfig.so.1    /lib/libfontconfig.so.1  \
-    --add-file /usr/lib/libtiff.so.5    /lib/libtiff.so.5  \
-    --add-file /usr/lib/libxcb.so.1    /lib/libxcb.so.1  \
-    --add-file /usr/lib/libdl.so.2    /lib/libdl.so.2  \
-    --add-file /usr/lib/libpthread.so.0    /lib/libpthread.so.0  \
-    --add-file /usr/lib/libstdc++.so.6    /lib/libstdc++.so.6  \
-    --add-file /usr/lib/libbz2.so.1    /lib/libbz2.so.1  \
-    --add-file /usr/lib/libexpat.so.1    /lib/libexpat.so.1  \
-    --add-file /usr/lib/libjbig.so.2.1    /lib/libjbig.so.2.1  \
-    --add-file /usr/lib/libXau.so.6    /lib/libXau.so.6  \
+    --add-file /usr/lib/libt1.so.5    /usr/lib/libt1.so.5  \
+    --add-file /usr/lib/libX11.so.6    /usr/lib/libX11.so.6  \
+    --add-file /usr/lib/libXpm.so.4    /usr/lib/libXpm.so.4  \
+    --add-file /usr/lib/libpng16.so.16    /usr/lib/libpng16.so.16  \
+    --add-file /usr/lib/libz.so.1    /usr/lib/libz.so.1  \
+    --add-file /usr/lib/libjpeg.so.62    /usr/lib/libjpeg.so.62  \
+    --add-file /usr/lib/libvpx.so.2    /usr/lib/libvpx.so.2  \
+    --add-file /usr/lib/libfreetype.so.6    /usr/lib/libfreetype.so.6  \
+    --add-file /usr/lib/libgcc_s.so.1    /usr/lib/libgcc_s.so.1  \
+    --add-file /usr/lib/libc.so.6    /usr/lib/libc.so.6  \
+    --add-file /lib/ld-linux-armhf.so.3 /usr/lib/ld-linux-armhf.so.3 \
+    --add-file /usr/lib/libm.so.6    /usr/lib/libm.so.6  \
+    --add-file /usr/lib/libfontconfig.so.1    /usr/lib/libfontconfig.so.1  \
+    --add-file /usr/lib/libtiff.so.5    /usr/lib/libtiff.so.5  \
+    --add-file /usr/lib/libxcb.so.1    /usr/lib/libxcb.so.1  \
+    --add-file /usr/lib/libdl.so.2    /usr/lib/libdl.so.2  \
+    --add-file /usr/lib/libpthread.so.0    /usr/lib/libpthread.so.0  \
+    --add-file /usr/lib/libstdc++.so.6    /usr/lib/libstdc++.so.6  \
+    --add-file /usr/lib/libbz2.so.1    /usr/lib/libbz2.so.1  \
+    --add-file /usr/lib/libexpat.so.1    /usr/lib/libexpat.so.1  \
+    --add-file /usr/lib/libjbig.so.2.1    /usr/lib/libjbig.so.2.1  \
+    --add-file /usr/lib/libXau.so.6    /usr/lib/libXau.so.6  \
+    --add-file /usr/lib/libmcrypt.so.4 /usr/lib/libmcrypt.so.4 \
+    --add-file /usr/lib/libltdl.so.7 /usr/lib/libltdl.so.7 \
+    --add-file /usr/lib/libicui18n.so.54 /usr/lib/libicui18n.so.54 \
+    --add-file /usr/lib/libicuuc.so.54 /usr/lib/libicuuc.so.54 \
+    --add-file /usr/lib/libicudata.so.54 /usr/lib/libicudata.so.54 \
+    --add-file /usr/lib/libicuio.so.54 /usr/lib/libicuio.so.54 \
     --user nginx \
     /usr/sbin/php-fpm
 
     #/bin/bash
 
-docker tag -f $IMAGE_NAME $IMAGE_NAME:latest
-docker tag -f $IMAGE_NAME $IMAGE_TAGNAME
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
 
 
 echo $IMAGE_NAME  $IMAGE_TAGNAME
