@@ -1,22 +1,22 @@
 #/bin/bash
 
-IMAGE_VERSION=1.8.1-1
+IMAGE_VERSION=1.8.1-3
 IMAGE_NAME=sotolitolabs-cubie/nginx-setup
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
-
-tar cvf volconf.tar vols/
+tar cjvf volconf.tar.bz2 vols/
 
 dockerize -t $IMAGE_NAME \
                    --add-file /bin/bash /bin/bash \
                    --add-file /bin/cp /bin/cp \
                    --add-file /bin/ls /bin/ls \
+                   --add-file /usr/bin/bzip2 /usr/bin/bzip2 \
                    --add-file /bin/mkdir /bin/mkdir \
                    --add-file /bin/tar /bin/tar \
-                   --add-file volconf.tar /volconf.tar  \
+                   --add-file volconf.tar.bz2 /volconf.tar.bz2  \
                    --add-file setup.sh /bin/setup.sh \
                    --cmd /bin/setup.sh
 
-docker tag -f $IMAGE_NAME $IMAGE_NAME:latest
-docker tag -f $IMAGE_NAME $IMAGE_TAGNAME
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
 
