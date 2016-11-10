@@ -1,0 +1,23 @@
+#/bin/bash
+
+IMAGE_VERSION=9.4.9-1
+IMAGE_NAME=sotolitolabs-cubie/postgresql-setup
+IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
+
+
+tar cjvf volconf.tar.bz2 vols/
+
+dockerize -t $IMAGE_NAME \
+                   --add-file /bin/bash /bin/bash \
+                   --add-file /bin/cp /bin/cp \
+                   --add-file /bin/ls /bin/ls \
+                   --add-file /bin/mkdir /bin/mkdir \
+                   --add-file /bin/tar /bin/tar \
+                   --add-file volconf.tar.bz2 /volconf.tar.bz2  \
+                   --add-file /usr/bin/bzip2 /usr/bin/bzip2 \
+                   --add-file setup.sh /bin/setup.sh \
+                   --cmd /bin/setup.sh
+
+docker tag $IMAGE_NAME $IMAGE_NAME:latest
+docker tag $IMAGE_NAME $IMAGE_TAGNAME
+

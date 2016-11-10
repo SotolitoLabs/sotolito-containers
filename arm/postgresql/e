@@ -1,0 +1,2 @@
+/usr/libexec/postgresql-ctl start -D /var/lib/pgsql/data -s -w -t 270
+

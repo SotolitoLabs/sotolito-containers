@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir /var/sotolito
+
+docker run --rm --name="postgresqlsetup"  \
+           -v /var/sotolito:/var/sotolito \
+           sotolitolabs-cubie/postgresql-setup
+

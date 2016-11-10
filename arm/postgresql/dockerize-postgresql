@@ -1,0 +1,46 @@
+#/bin/bash
+
+IMAGE_VERSION=9.4.9-1
+IMAGE_NAME=sotolitolabs-cubie/postgresql
+IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
+
+dockerize -t $IMAGE_NAME \
+                   --symlinks preserve  \
+                   --filetools \
+                   --add-file /bin/bash /bin/bash \
+                   --add-file /usr/bin/su /usr/bin/su \
+                   --add-file /usr/bin/strace /usr/bin/strace \
+                   --user postgres \
+                   --group postgres \
+                   --add-file /etc/login.defs /etc/login.defs\
+                   --add-file /etc/pam.d/su /etc/pam.d/su \
+                   --add-file /usr/bin/initdb /usr/bin/initdb \
+                   --add-file /usr/bin/pg_basebackup /usr/bin/pg_basebackup \
+                   --add-file /usr/bin/pg_controldata /usr/bin/pg_controldata \
+                   --add-file /usr/bin/pg_ctl  /usr/bin/pg_ctl  \
+                   --add-file /usr/bin/pg_receivexlog /usr/bin/pg_receivexlog \
+                   --add-file /usr/bin/pg_recvlogical /usr/bin/pg_recvlogical \
+                   --add-file /usr/bin/pg_resetxlog  /usr/bin/pg_resetxlog \
+                   --add-file /usr/bin/postgres /usr/bin/postgres \
+                   --add-file /usr/bin/postgresql-setup /usr/bin/postgresql-setup  \
+                   --add-file /usr/bin/postmaster /usr/bin/postmaster \
+                   --add-file /usr/lib/pgsql/ /usr/lib/pgsql/  \
+                   --add-file /usr/libexec/initscripts/legacy-actions/postgresql /usr/libexec/initscripts/legacy-actions/postgresql \
+                   --add-file /usr/libexec/initscripts/legacy-actions/postgresql/initdb /usr/libexec/initscripts/legacy-actions/postgresql/initdb \
+                   --add-file /usr/libexec/initscripts/legacy-actions/postgresql/upgrade /usr/libexec/initscripts/legacy-actions/postgresql/upgrade \
+                   --add-file /usr/libexec/postgresql-check-db-dir /usr/libexec/postgresql-check-db-dir  \
+                   --add-file /usr/libexec/postgresql-ctl /usr/libexec/postgresql-ctl  \
+                   --add-file /usr/share/pgsql/ /usr/share/pgsql/ \
+                   --add-file /usr/share/zoneinfo/ /usr/share/zoneinfo/ \
+                   --add-file /usr/lib/locale/ /usr/lib/locale/ \
+                   "/usr/bin/postgres -D /var/lib/pgsql/data"
+
+
+
+
+                   #/bin/bash
+
+
+docker tag $IMAGE_NAME $IMAGE_NAME:latest
+docker tag $IMAGE_NAME $IMAGE_TAGNAME
+

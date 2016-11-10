@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#docker run --name="postgresql" -ti  -p 5432:5432   \
+docker run --name="postgresql" -d -p 5432:5432    \
+           -u postgres  \
+           -v /var/sotolito/vols/postgresql/var:/var/ \
+           -v /var/sotolito/vols/postgresql/tmp:/tmp \
+           sotolitolabs-cubie/postgresql  \
+
+
+
