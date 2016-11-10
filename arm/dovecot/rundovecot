@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#docker run --name="dovecot" -ti  -p 143:143 -p 110:110   \
+docker run --name="dovecot" -d  -p 143:143 -p 110:110  \
+           -v /var/sotolito/vols/dovecot/var/lib/dovecot/:/var/lib/dovecot \
+           -v /var/sotolito/vols/dovecot/var/run/dovecot/:/var/run/dovecot \
+           -v /var/sotolito/vols/dovecot/usr/lib/tmpfiles.d/:/usr/lib/tmpfiles.d/ \
+           -v /var/sotolito/vols/dovecot/etc/pki/dovecot/:/etc/pki/dovecot/ \
+           -v /var/sotolito/vols/dovecot/etc/dovecot/:/etc/dovecot/ \
+           -e "LANG=en_US.UTF-8" \
+           -e "LC_MESSAGES=POSIX" \
+           -e "LANGUAGE=en_US.UTF-8" \
+           -e "LC_CTYPE=en_US.UTF-8" \
+           sotolitolabs-cubie/dovecot   \
+
+
+

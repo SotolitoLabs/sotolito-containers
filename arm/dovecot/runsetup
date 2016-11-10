@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir /var/sotolito
+
+docker run --rm --name="dovecotsetup"  \
+           -v /var/sotolito:/var/sotolito \
+           sotolitolabs-cubie/dovecot-setup
+

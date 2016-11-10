@@ -1,0 +1,29 @@
+#/bin/bash
+
+IMAGE_VERSION=2.2.25-1
+IMAGE_NAME=sotolitolabs-cubie/dovecot
+IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
+
+dockerize -t $IMAGE_NAME \
+                   --symlinks preserve  \
+                   --filetools \
+                   --add-file /bin/bash /bin/bash \
+                   --user dovecot \
+                   --user dovenull \
+                   --group dovecot \
+                   --group dovenull \
+                   --add-file /usr/bin/doveadm /usr/bin/doveadm \
+                   --add-file /usr/bin/doveconf /usr/bin/doveconf \
+                   --add-file /usr/bin/dsync /usr/bin/dsync \
+                   --add-file /usr/sbin/dovecot /usr/sbin/dovecot \
+                   --add-file /usr/lib/dovecot/ /usr/lib/dovecot/  \
+                   --add-file /usr/libexec/dovecot/ /usr/libexec/dovecot/ \
+                   --add-file /usr/share/dovecot/  /usr/share/dovecot/ \
+                   "/usr/sbin/dovecot -F"
+
+
+#/bin/bash
+
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
+
