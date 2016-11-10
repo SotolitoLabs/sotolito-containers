@@ -1,0 +1,43 @@
+
+instalar dockerize de :
+https://github.com/larsks/dockerize
+
+actualizar fedora :  
+dnf upgrade
+
+Cada paquete a dockerizar hay un 0runmefirst.sh  el cual hay que ejecutar para instalar los RPMS
+requeridos por el paquete
+
+
+Se crean las imagenes,generalmente DOS imagenes,una imagen para el BINARIO y otro para los archivos 
+de config y datos
+
+el script dockerize-PROGRAMA-setup este crea la imagen que contiene lo que va en /etc y demas 
+cosas que NO CAMBIAN
+
+el script dockerize-PROGRAMA    este crea la imagen del programa con sus libs y este hay que estarlo
+   actualizando cada vez que haya actualizaciones en los RPMS del programa, recordar que estamos 
+   usando las actualizaciones de fedora y este cambia a cada rato 
+
+
+hay que crear las imagenes de setup y del programa esto en cada directorio :
+    ./dockerize-PROGRAMA
+    ./dockerize-PROGRAMA-setup
+
+
+para ejecutar las imagenes SIEMPRE primero y POR UNICA VEZ hay que correr el contenedor
+    que se creo usando dockerize-PROGRAMA-setup. 
+    Este se ejecuta usando el script llamado :  runsetup 
+    hay un runsetup en cada directorio de cada paquete el cual instala los datos y configuraciones
+    del programa
+
+para ejecutar finalmente el contenedor se ejecuta el script    runPROGRAMA en el caso de bind 
+seria runbind,y este script hay uno en cada directorio
+
+
+Puntos pendientes :
+   - automatizar la creacion de usuario y base de datos para wordpress y owncloud, temporalmente usar
+     en el host usando el password default  "sotolito" claro sin comillas :
+ 
+     mysql -u root -h 172.17.0.1 -p
+     
