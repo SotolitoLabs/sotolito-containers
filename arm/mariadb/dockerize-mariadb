@@ -1,6 +1,6 @@
 #/bin/bash
 
-IMAGE_VERSION=10.0.23-1
+IMAGE_VERSION=10.0.27-1
 IMAGE_NAME=sotolitolabs-cubie/mariadb
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
@@ -24,9 +24,9 @@ dockerize -t $IMAGE_NAME \
                    --add-file /usr/lib/mysql/ /usr/lib/mysql/   \
                    --add-file /usr/share/mariadb/ /usr/share/mariadb/ \
                    /usr/bin/mysqld_safe
-                   
+
 
                    #/bin/bash
-docker tag -f $IMAGE_NAME $IMAGE_NAME:latest
-docker tag -f $IMAGE_NAME $IMAGE_TAGNAME
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
 

@@ -1,23 +1,23 @@
 #/bin/bash
 
-IMAGE_VERSION=10.0.23-1
+IMAGE_VERSION=10.0.27-1
 IMAGE_NAME=sotolitolabs-cubie/mariadb-setup
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
-PASSWORD=$1
 
-tar cvf volconf.tar.bz2 vols/
+tar cjvf volconf.tar.bz2 vols/
 
 dockerize -t $IMAGE_NAME \
                    --add-file /bin/bash /bin/bash \
                    --add-file /bin/cp /bin/cp \
                    --add-file /bin/ls /bin/ls \
                    --add-file /bin/mkdir /bin/mkdir \
+                   --add-file /usr/bin/bzip2 /usr/bin/bzip2 \
                    --add-file /bin/tar /bin/tar \
                    --add-file volconf.tar.bz2 /volconf.tar.bz2  \
                    --add-file setup.sh /bin/setup.sh \
-                   --cmd /bin/setup.sh $PASSWORD
+                   --cmd /bin/setup.sh
 
-docker tag -f $IMAGE_NAME $IMAGE_NAME:latest
-docker tag -f $IMAGE_NAME $IMAGE_TAGNAME
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
 

@@ -1,19 +1,9 @@
 #!/bin/bash
 
-# Set up MariaDB
-
-if [[ $1 != "" ]]; then
-    PASSWORD=$1
-else 
-    PASSWORD="sotolito"
-fi
-
-echo "Setting up MariaDB"
-
+echo "setupiando ando"
 
 
 mkdir /var/sotolito/
 cd /var/sotolito 
-tar xvf /volconf.tar
+tar xvf /volconf.tar.bz2
 
-mysqladmin -u root password $PASSWORD
