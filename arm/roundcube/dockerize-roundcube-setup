@@ -1,0 +1,25 @@
+#/bin/bash
+
+IMAGE_VERSION=1.2.2
+IMAGE_NAME=sotolitolabs-cubie/roundcube-setup
+IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
+
+
+dockerize -t $IMAGE_NAME \
+                   --add-file /bin/bash /bin/bash \
+                   --add-file /bin/cp /bin/cp \
+                   --add-file /bin/ls /bin/ls \
+                   --add-file /bin/ln /bin/ln \
+                   --add-file /bin/chown /bin/chown \
+                   --add-file /bin/mkdir /bin/mkdir \
+                   --add-file /bin/tar /bin/tar \
+                   --add-file /bin/gzip /bin/gzip \
+                   --add-file roundcubemail-1.2.2-complete.tar.gz /roundcubemail-1.2.2-complete.tar.gz  \
+                   --add-file setup.sh /bin/setup.sh \
+                   --user nginx \
+                   --group nginx \
+                   --cmd /bin/setup.sh
+
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
+
