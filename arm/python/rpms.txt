@@ -1,0 +1,4 @@
+python
+python-libs
+python-psycopg2
+python-django

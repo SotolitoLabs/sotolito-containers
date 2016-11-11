@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#docker run --name="python" -d   \
+docker run --rm --name="python2.7" -ti     \
+           -e "LANG=en_US.UTF-8" \
+           -e "LC_MESSAGES=POSIX" \
+           -e "LANGUAGE=en_US.UTF-8" \
+           -e "LC_CTYPE=en_US.UTF-8" \
+           -v "$PWD":/usr/src/myapp \
+           -w /usr/src/myapp \
+           sotolitolabs-cubie/python2.7 a.py 

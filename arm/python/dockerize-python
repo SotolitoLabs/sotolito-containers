@@ -1,0 +1,48 @@
+#/bin/bash
+
+IMAGE_VERSION=2.7.11-3
+IMAGE_NAME=sotolitolabs-cubie/python2.7
+IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
+
+dockerize -t $IMAGE_NAME \
+                   --symlinks preserve  \
+                   --filetools \
+                   --add-file /bin/bash /bin/bash \
+                   --add-file /usr/lib/libssl.so.10   /usr/lib/libssl.so.10 \
+                   --add-file /usr/lib/libssl.so.1.0.2g /usr/lib/libssl.so.1.0.2g \
+                   --add-file /usr/lib/libcrypto.so.10 /usr/lib/libcrypto.so.10\
+                   --add-file /usr/lib/libcrypto.so.1.0.2g /usr/lib/libcrypto.so.1.0.2g\
+                   --add-file /usr/lib/libgssapi_krb5.so.2 /usr/lib/libgssapi_krb5.so.2\
+                   --add-file /usr/lib/libgssapi_krb5.so.2.2 /usr/lib/libgssapi_krb5.so.2.2\
+                   --add-file /lib/libcom_err.so.2 /lib/libcom_err.so.2 \
+                   --add-file /lib/libcom_err.so.2.1 /lib/libcom_err.so.2.1 \
+                   --add-file /lib/libk5crypto.so.3 /lib/libk5crypto.so.3\
+                   --add-file /lib/libk5crypto.so.3.1 /lib/libk5crypto.so.3.1\
+                   --add-file /lib/libresolv-2.22.so /lib/libresolv-2.22.so\
+                   --add-file /lib/libz.so.1.2.8 /lib/libz.so.1.2.8\
+                   --add-file /lib/libkrb5support.so.0.1 /lib/libkrb5support.so.0.1\
+                   --add-file /lib/libkeyutils.so.1.5 /lib/libkeyutils.so.1.5\
+                   --add-file /lib/libpcre.so.1.2.6 /lib/libpcre.so.1.2.6\
+                   --add-file /lib/libresolv.so.2 /lib/libresolv.so.2\
+                   --add-file /lib/libz.so.1 /lib/libz.so.1\
+                   --add-file /lib/libkrb5support.so.0 /lib/libkrb5support.so.0\
+                   --add-file /lib/libkeyutils.so.1 /lib/libkeyutils.so.1\
+                   --add-file /lib/libselinux.so.1 /lib/libselinux.so.1\
+                   --add-file /lib/libpcre.so.1  /lib/libpcre.so.1 \
+                   --add-file /lib/libkrb5.so.3 /lib/libkrb5.so.3 \
+                   --add-file /lib/libkrb5.so.3.3 /lib/libkrb5.so.3.3\
+                   --add-file /lib/libsqlite3.so.0 /lib/libsqlite3.so.0\
+                   --add-file /lib/libsqlite3.so.0.8.6 /lib/libsqlite3.so.0.8.6\
+                   --add-file /lib/libpq.so.5 /lib/libpq.so.5\
+                   --add-file /lib/libpq.so.5.7 /lib/libpq.so.5.7 \
+                   --add-file /usr/bin/python /usr/bin/python \
+                   --add-file /usr/bin/python2 /usr/bin/python2 \
+                   --add-file /usr/bin/python2.7 /usr/bin/python2.7 \
+                   --add-file /usr/lib/python2.7/ /usr/lib/python2.7 \
+                   -cmd /usr/bin/python2.7
+
+
+#                   /bin/bash
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
+
