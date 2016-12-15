@@ -1,6 +1,6 @@
 #/bin/bash
 
-IMAGE_VERSION=9.1.2
+IMAGE_VERSION=9.1.3
 IMAGE_NAME=sotolitolabs-cubie/owncloud-setup
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
@@ -13,7 +13,7 @@ dockerize -t $IMAGE_NAME \
                    --add-file /bin/mkdir /bin/mkdir \
                    --add-file /bin/tar /bin/tar \
                    --add-file /bin/bzip2 /bin/bzip2 \
-                   --add-file owncloud-9.1.2.tar.bz2 /owncloud-9.1.2.tar.bz2  \
+                   --add-file owncloud-9.1.3.tar.bz2 /owncloud-9.1.3.tar.bz2  \
                    --add-file setup.sh /bin/setup.sh \
                    --user nginx \
                    --group nginx \
