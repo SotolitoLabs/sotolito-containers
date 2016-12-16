@@ -1,6 +1,6 @@
 #/bin/bash
 
-IMAGE_VERSION=10.0.27-1
+IMAGE_VERSION=10.0.28-1
 IMAGE_NAME=sotolitolabs-cubie/mariadb-setup
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
