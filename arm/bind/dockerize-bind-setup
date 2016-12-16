@@ -1,6 +1,6 @@
 #/bin/bash
 
-IMAGE_VERSION=9.10.4-2.P3
+IMAGE_VERSION=9.10.4-2.P4
 IMAGE_NAME=sotolitolabs-cubie/bind-setup
 IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
 
