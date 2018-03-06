@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir /var/sotolito
+
+docker run --rm --name="nginxsetup"  \
+           -v /var/sotolito:/var/sotolito \
+           sotolitolabs-alpine-arm-nginx-setup
+
+
+
