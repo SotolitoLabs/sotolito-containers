@@ -1,0 +1,24 @@
+#/bin/bash
+
+IMAGE_VERSION=4.6.1
+IMAGE_NAME=sotolitolabs-cubie/wordpress-setup
+IMAGE_TAGNAME=$IMAGE_NAME:$IMAGE_VERSION
+
+
+dockerize -t $IMAGE_NAME \
+                   --add-file /bin/bash /bin/bash \
+                   --add-file /bin/cp /bin/cp \
+                   --add-file /bin/ls /bin/ls \
+                   --add-file /bin/chown /bin/chown \
+                   --add-file /bin/mkdir /bin/mkdir \
+                   --add-file /bin/tar /bin/tar \
+                   --add-file /bin/gzip /bin/gzip \
+                   --add-file latest.tar.gz /latest.tar.gz  \
+                   --add-file setup.sh /bin/setup.sh \
+                   --user nginx \
+                   --group nginx \
+                   --cmd /bin/setup.sh
+
+docker tag  $IMAGE_NAME $IMAGE_NAME:latest
+docker tag  $IMAGE_NAME $IMAGE_TAGNAME
+

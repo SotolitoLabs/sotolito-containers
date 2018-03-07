@@ -1,0 +1,8 @@
+#!/bin/bash
+
+VERSION=$1
+VERSION=10.0.7
+docker build --no-cache -t sotolitolabs-owncloud:$VERSION .
+
+docker tag sotolitolabs-owncloud:$VERSION  sotolitolabs-owncloud:latest
+

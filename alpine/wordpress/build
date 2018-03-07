@@ -1,0 +1,9 @@
+#!/bin/bash
+
+VERSION=$1
+VERSION=4.9.4
+docker build --no-cache -t sotolitolabs-wordpress:$VERSION .
+
+docker tag sotolitolabs-wordpress:$VERSION  sotolitolabs-wordpress:latest
+
+
