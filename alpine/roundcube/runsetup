@@ -1,0 +1,4 @@
+docker run --rm --name="roundcube-setup"  \
+           -v /var/sotolito:/var/sotolito \
+           sotolitolabs-roundcube
+
