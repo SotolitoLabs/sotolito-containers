@@ -1,0 +1,27 @@
+#!/bin/sh
+
+chown mysql.mysql /var/lib/mysql
+mkdir /var/lib/mysql/mysql
+chown mysql /var/lib/mysql/mysql
+mkdir /var/lib/mysql/test
+chown mysql /var/lib/mysql/test
+mkdir /run/mysqld
+chown mysql /run/mysqld
+
+cp /my.cnf /etc/mysql
+chown mysql /etc/mysql/my.cnf
+
+
+su mysql -c "mysql_install_db --user=mysql --auth-root-authentication-method=normal"
+
+su mysql -c mysqld &
+sleep 5
+
+
+echo "create user 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD';"> /us.sql
+echo "grant all privileges on *.* to 'root'@'%' with grant  option;" >> /us.sql 
+echo "flush privileges;" >> /us.sql
+
+
+mysql -u root  < /us.sql
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+VERSION=$1
+VERSION=10.1.28-r1
+docker build --no-cache  -t sotolitolabs-alpine-arm-mariadb:$VERSION .
+
+docker tag sotolitolabs-alpine-arm-mariadb:$VERSION  sotolitolabs-alpine-arm-mariadb:latest
+
+
+
+
