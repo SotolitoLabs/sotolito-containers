@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker run -d --name="php-fpm" -p172.17.0.1:9000:9000 -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/  -v /var/sotolito/vols/php-fpm/etc/php7/:/etc/php7/ -v /var/sotolito/vols/php-fpm/var/lib/php7/:/var/lib/php7/ sotolitolabs-alpine-arm-php-fpm 
+docker run -d --name="php-fpm" -p172.17.0.1:9000:9000 --link mariadb:mariadb  -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/  -v /var/sotolito/vols/php-fpm/etc/php7/:/etc/php7/ -v /var/sotolito/vols/php-fpm/var/lib/php7/:/var/lib/php7/ sotolitolabs-alpine-arm-php-fpm 
 

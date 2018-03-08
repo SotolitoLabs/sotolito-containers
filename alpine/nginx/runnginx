@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #docker run --name="nginx" -ti  -p 8080:80   \
-docker run --name="nginx" -d -p 8080:80    \
+docker run --link php-fpm:php-fpm --name="nginx" -d -p 8080:80    \
            -v /var/sotolito/vols/nginx/var:/var/ \
            -v /var/sotolito/vols/nginx/etc/nginx:/etc/nginx \
            -v /var/sotolito/vols/php-fpm/run/php-fpm/:/run/php-fpm/  \
-           -v /var/sotolito/vols/php-apps/:/usr/share/nginx/html/php-apps/ \
+           -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/ \
            -e "LANG=en_US.UTF-8" \
            -e "LC_MESSAGES=POSIX" \
            -e "LANGUAGE=en_US.UTF-8" \
