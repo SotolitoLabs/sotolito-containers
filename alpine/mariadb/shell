@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker run -ti --rm --name="mariadbsetup"   \
+docker run -ti --rm --name="mariadbshell"  \
            -v /var/sotolito/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
            -v /var/sotolito/vols/mariadb/etc/mysql:/etc/mysql \
            -v /var/sotolito/vols/mariadb/run/mysqld:/run/mysqld/ \
@@ -9,5 +9,5 @@ docker run -ti --rm --name="mariadbsetup"   \
            -e "LANGUAGE=en_US.UTF-8" \
            -e "LC_CTYPE=en_US.UTF-8" \
            -e "MYSQL_ROOT_PASSWORD=sotolito" \
-           sotolitolabs-alpine-arm-mariadb  /doinstall
+           sotolitolabs-alpine-arm-mariadb  /bin/sh
 
