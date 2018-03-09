@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker run -ti --rm --name="mariadbshell"  \
+docker run --link mariadb:mariadb -ti --rm --name="mariadbshell"  \
            -v /var/sotolito/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
            -v /var/sotolito/vols/mariadb/etc/mysql:/etc/mysql \
            -v /var/sotolito/vols/mariadb/run/mysqld:/run/mysqld/ \
