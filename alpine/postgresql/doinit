@@ -1,0 +1,29 @@
+#!/bin/sh
+
+chown -R postgres:postgres /var/lib/postgresql/
+
+
+su postgres -c initdb 
+
+cp /var/lib/postgresql/10/data/pg_hba.conf /var/lib/postgresql/10/data/pg_hba.conf.ONE
+
+echo "host all  all    0.0.0.0/0  trust" >> /var/lib/postgresql/10/data/pg_hba.conf
+
+
+echo "listen_addresses='*'" >>  /var/lib/postgresql/10/data/postgresql.conf
+
+
+mkdir -p  /run/postgresql 
+chown postgres:postgres /run/postgresql
+chown postgres:postgres /var/lib/postgresql/10/data/*
+
+su -c postgres postgres &
+
+sleep 10 
+
+su -c "psql -c \"CREATE USER sotolito WITH SUPERUSER ENCRYPTED PASSWORD '$PSQL_PASSWORD';\"" postgres 
+su -c "psql -c \"CREATE DATABASE  sotolito WITH OWNER sotolito;\"" postgres 
+
+cp /var/lib/postgresql/10/data/pg_hba.conf.ONE  /var/lib/postgresql/10/data/pg_hba.conf
+echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/10/data/pg_hba.conf
+chown postgres:postgres /var/lib/postgresql/10/data/*

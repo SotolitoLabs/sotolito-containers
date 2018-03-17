@@ -1,0 +1,2 @@
+docker run --rm -ti  --name="postgresqlinit" --link postgresql:postgresql -h psqlshell -v /var/sotolito/vols/postgresql/10/:/var/lib/postgresql/10/  -v /var/sotolito/vols/postgresql/10/run/:/run/postgresql/: sotolitolabs-alpine-arm-postgresql  /bin/sh
+

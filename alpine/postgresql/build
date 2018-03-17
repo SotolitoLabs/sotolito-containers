@@ -1,0 +1,12 @@
+#!/bin/bash
+
+VERSION=$1
+VERSION=10.3-r0
+docker build --no-cache  -t sotolitolabs-alpine-arm-postgresql:$VERSION .
+
+
+docker tag sotolitolabs-alpine-arm-postgresql:$VERSION sotolitolabs-alpine-arm-postgresql:latest
+
+
+
+
