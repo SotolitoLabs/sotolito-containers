@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CURRENT_VERSION="14.0.0"
+
+if [[ ${1} == "" ]]; then
+    VERSION=$CURRENT_VERSION
+else
+    VERSION=$1
+fi
+
+docker build --no-cache -t sotolitolabs-nextcloud:$VERSION .
+
+docker tag sotolitolabs-nextcloud:$VERSION  sotolitolabs-nextcloud:latest
+

@@ -1,0 +1,4 @@
+docker run --rm --name="nextcloud-setup"  \
+           -v /var/sotolito:/var/sotolito \
+           sotolitolabs-nextcloud
+
