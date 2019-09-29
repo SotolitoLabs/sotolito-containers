@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CURRENT_VERSION="14.0.0"
+CURRENT_VERSION="16.0.5"
 
 if [[ ${1} == "" ]]; then
     VERSION=$CURRENT_VERSION
@@ -8,7 +8,7 @@ else
     VERSION=$1
 fi
 
-docker build --no-cache -t sotolitolabs-nextcloud:$VERSION .
+NEXTCLOUD_VERSION=$VERSION podman build --no-cache -t sotolitolabs-nextcloud:$VERSION .
 
-docker tag sotolitolabs-nextcloud:$VERSION  sotolitolabs-nextcloud:latest
+podman tag sotolitolabs-nextcloud:$VERSION  sotolitolabs-nextcloud:latest
 
