@@ -1,4 +1,14 @@
-docker run --rm --name="nextcloud-setup"  \
-           -v /var/sotolito:/var/sotolito \
+#!/bin/bash
+
+# Setup script for nextcloud
+
+HOST_DIR="/var/sotolito"
+
+if [[ "${1}" != "" ]]; then
+  HOST_DIR=$1
+fi
+
+podman run --rm --name="sotolito-nextcloud-setup"  \
+           -v $HOST_DIR:/var/sotolito \
            sotolitolabs-nextcloud
 
