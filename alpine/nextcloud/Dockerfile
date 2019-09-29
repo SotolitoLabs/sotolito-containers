@@ -1,7 +1,8 @@
 FROM  alpine
 MAINTAINER Ivan Chavero "ichavero@chavero.com.mx"
+ENV NEXTCLOUD_VERSION 16.0.5
 
-COPY nextcloud-14.0.0.tar.bz2 /
+ADD https://download.nextcloud.com/server/releases/nextcloud-$NEXTCLOUD_VERSION.tar.bz2 /nextcloud.tar.bz2
 COPY setup.sh /
 
 cmd ["/setup.sh"]
