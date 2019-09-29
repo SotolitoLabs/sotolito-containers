@@ -1,0 +1,8 @@
+
+Podman can run containers as a specified user (instead of docker running them as the
+docker daemon), if we want to use the global var directory /var/sotolito we must
+add a sotolito group shared by all the container users.
+
+groupadd sotolito
+chgrp  sotolito /var/sotolito
+useradd -g sotolito ....
