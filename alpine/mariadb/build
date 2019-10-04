@@ -1,10 +1,23 @@
 #!/bin/bash
 
-VERSION=$1
-VERSION=10.1.28-r1
-docker build --no-cache  -t sotolitolabs-alpine-arm-mariadb:$VERSION .
+source ../../lib/containers.shlib
+MY_HOST_USER="sotolito-mariadb"
+BUILD_DIR=$(pwd)
+VERSION=10.4.8
+if [[ "${1}" != "" ]]; then
+  VERSION=$1
+fi
 
-docker tag sotolitolabs-alpine-arm-mariadb:$VERSION  sotolitolabs-alpine-arm-mariadb:latest
+
+IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
+
+echo "Creating mariadb image ${IMAGE_NAME}"
+
+SUDO=$(check_if_sudo $MY_HOST_USER)
+
+echo "COMMAND: $SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION ${BUILD_DIR}"
+$SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION $BUILD_DIR
+$SUDO /usr/bin/podman tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
 
 
 
