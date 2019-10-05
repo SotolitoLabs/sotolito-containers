@@ -16,18 +16,19 @@ if [[ "${1}" != "" ]]; then
 fi
 
 SUDO=$(check_if_sudo $MY_HOST_USER)
-$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld}
+$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
 
 echo "Running setup container"
 
-LANG="en_US.UTF-8"\
-LC_MESSAGES=POSIX \
-LANGUAGE=en_US.UTF-8 \
-LC_CTYPE=en_US.UTF-8 \
-MYSQL_ROOT_PASSWORD=$MY_PW
 $SUDO podman run -ti --rm --name="mariadbsetup"   \
   -v $HOST_DIR/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
+  -v $HOST_DIR/vols/mariadb/var/tmp/mariadb/:/var/tmp/mariadb/ \
   -v $HOST_DIR/vols/mariadb/etc/mysql:/etc/mysql \
   -v $HOST_DIR/vols/mariadb/run/mysqld:/run/mysqld/ \
+  -e LANG="en_US.UTF-8"\
+  -e LC_MESSAGES=POSIX \
+  -e LANGUAGE=en_US.UTF-8 \
+  -e LC_CTYPE=en_US.UTF-8 \
+  -e MYSQL_ROOT_PASSWORD="$MY_PW"\
   $IMAGE_NAME  /doinstall
 
