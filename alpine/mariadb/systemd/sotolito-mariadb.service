@@ -1,0 +1,30 @@
+[Unit]
+Description=Sotolito MariaDB Podman Container
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sotolito/mariadb.env
+User=${CONTAINER_USER}
+Group=${CONTAINER_GROUP}
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman rm "${CONTAINER_NAME}"
+ExecStart=/usr/bin/podman run -d  --name="${CONTAINER_NAME}" -p 127.0.0.1:3306:3306 \
+  -v $VOLUME_DIR/var/lib/mysql/:/var/lib/mysql/ \
+  -v $VOLUME_DIR/var/tmp/mariadb/:/var/tmp/mariadb/ \
+  -v $VOLUME_DIR/etc/mysql:/etc/mysql \
+  -v $VOLUME_DIR/run/mysqld:/run/mysqld/ \
+  -e LANG="en_US.UTF-8"\
+  -e LC_MESSAGES=POSIX \
+  -e LANGUAGE=en_US.UTF-8 \
+  -e LC_CTYPE=en_US.UTF-8 \
+  ${IMAGE_NAME}
+
+ExecReload=-/usr/bin/podman stop "${CONTAINER_NAME}"
+ExecReload=-/usr/bin/podman rm "${CONTAINER_NAME}"
+ExecStop=-/usr/bin/podman stop "${CONTAINER_NAME}"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
