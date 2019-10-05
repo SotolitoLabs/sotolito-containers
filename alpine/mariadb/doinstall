@@ -20,10 +20,9 @@ mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 su mysql -c mysqld &
 sleep 5
 
-echo "create user 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD';"> /us.sql
-echo "grant all privileges on *.* to 'root'@'%' with grant  option;" >> /us.sql 
-echo "flush privileges;" >> /us.sql
+echo "Granting privileges for external access"
+echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  identified by '${MYSQL_ROOT_PASSWORD}';" > /grant.sql 
+echo "flush privileges;" >> /grant.sql
+mysql -u root  < /grant.sql
 
-
-mysql -u root  < /us.sql
-
+/usr/bin/mysqladmin -u root password $MYSQL_ROOT_PASSWORD
