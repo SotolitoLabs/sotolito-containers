@@ -3,12 +3,9 @@
 # This container should be run as the mariadb container user
 
 source ../../lib/containers.shlib
+source systemd/mariadb.env
 
-MY_HOST_USER="sotolito-mariadb"
-HOST_DIR="/var/sotolito"
-VOLUME_DIR="${HOST_DIR}/vols/mariadb"
 IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
-
 
 if [[ "${1}" != "" ]]; then
   HOST_DIR=$1
@@ -16,7 +13,7 @@ fi
 
 # Run as the specified user
 
-SUDO=$(check_if_sudo $MY_HOST_USER)
+SUDO=$(check_if_sudo $CONTAINER_USER)
 
 $SUDO /usr/bin/podman run -d  --name="mariadb" -p 127.0.0.1:3306:3306    \
   -v $VOLUME_DIR/var/lib/mysql/:/var/lib/mysql/ \
