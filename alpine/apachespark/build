@@ -1,0 +1,13 @@
+#!/bin/bash
+
+CURRENT_VERSION="2.4.4"
+
+if [[ ${1} == "" ]]; then
+    VERSION=$CURRENT_VERSION
+else
+    VERSION=$1
+fi
+
+APACHESPARK_VERSION=$VERSION podman build --no-cache -t sotolitolabs-apachespark:$VERSION .
+
+podman tag sotolitolabs-apachespark:$VERSION  sotolitolabs-apachespark:latest
