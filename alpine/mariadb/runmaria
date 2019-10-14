@@ -3,7 +3,7 @@
 # This container should be run as the mariadb container user
 
 source ../../lib/containers.shlib
-source systemd/mariadb.env
+source systemd/mariadb.env.${HOSTTYPE}
 
 IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
 
