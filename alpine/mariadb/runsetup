@@ -3,9 +3,8 @@
 # Setup the mariadb container environment
 
 source ../../lib/containers.shlib
-MY_HOST_USER="sotolito-mariadb"
-HOST_DIR="/var/sotolito"
-VOLUME_DIR="${HOST_DIR}/vols/mariadb"
+source systemd/mariadb.env.${HOSTTYPE}
+
 IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
 
 echo "Setting put the mariadb container environment"
@@ -15,7 +14,7 @@ if [[ "${1}" != "" ]]; then
   MY_PW=$1
 fi
 
-SUDO=$(check_if_sudo $MY_HOST_USER)
+SUDO=$(check_if_sudo $CONTAINER_USER)
 $SUDO /usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
 
 echo "Running setup container"
@@ -31,4 +30,8 @@ $SUDO podman run -ti --rm --name="mariadbsetup"   \
   -e LC_CTYPE=en_US.UTF-8 \
   -e MYSQL_ROOT_PASSWORD="$MY_PW"\
   $IMAGE_NAME  /doinstall
+
+echo "Setup systemd unit"
+sudo cp systemd/mariadb.env /etc/sotolito/
+sudo cp systemd/sotolito-mariadb.service /usr/lib/systemd/system/
 
