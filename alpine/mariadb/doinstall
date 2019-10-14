@@ -1,27 +1,28 @@
 #!/bin/sh
 
+# This script should be run inside the mariadb container
+
+echo "Creating directories"
 chown mysql.mysql /var/lib/mysql
 mkdir /var/lib/mysql/mysql
-chown mysql /var/lib/mysql/mysql
+chown mysql.mysql /var/lib/mysql/mysql
 mkdir /var/lib/mysql/test
-chown mysql /var/lib/mysql/test
+chown mysql.mysql /var/lib/mysql/test
 mkdir /run/mysqld
-chown mysql /run/mysqld
+chown mysql.mysql /run/mysqld
+mkdir /var/tmp/mariadb
+chown mysql.mysql /var/tmp/mariadb
 
 cp /my.cnf /etc/mysql
-chown mysql /etc/mysql/my.cnf
+chown mysql.mysql /etc/mysql/my.cnf
 
-
-su mysql -c "mysql_install_db --user=mysql --auth-root-authentication-method=normal"
-
+mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 su mysql -c mysqld &
 sleep 5
 
+echo "Granting privileges for external access"
+echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  identified by '${MYSQL_ROOT_PASSWORD}';" > /grant.sql 
+echo "flush privileges;" >> /grant.sql
+mysql -u root  < /grant.sql
 
-echo "create user 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD';"> /us.sql
-echo "grant all privileges on *.* to 'root'@'%' with grant  option;" >> /us.sql 
-echo "flush privileges;" >> /us.sql
-
-
-mysql -u root  < /us.sql
-
+/usr/bin/mysqladmin -u root password $MYSQL_ROOT_PASSWORD

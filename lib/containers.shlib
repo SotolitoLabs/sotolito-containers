@@ -1,0 +1,26 @@
+# General functions for building containers
+
+# Global vars
+HOST_DIR="/var/sotolito"
+
+function check_user() {
+  local exist=$(grep $1 /etc/passwd)
+  if [[ "${exist}" != "" ]]; then
+    echo true
+    return
+  fi
+  echo false
+}
+
+function check_if_sudo() {
+  if [[ $(check_user $1) != true ]]; then
+    sudo useradd -m -g sotolito -s /sbin/nologin -c "Sotolito ${1} Container User" -d /home/$1 $1
+    sudo passwd -l $1
+  fi
+ 
+  if [[ "${USER}" != "${1}" ]]; then
+    echo "sudo -i -u ${1} "
+  fi
+
+
+}

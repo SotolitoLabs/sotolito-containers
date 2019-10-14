@@ -1,13 +1,37 @@
 #!/bin/bash
 
-docker run -ti --rm --name="mariadbsetup"   \
-           -v /var/sotolito/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
-           -v /var/sotolito/vols/mariadb/etc/mysql:/etc/mysql \
-           -v /var/sotolito/vols/mariadb/run/mysqld:/run/mysqld/ \
-           -e "LANG=en_US.UTF-8" \
-           -e "LC_MESSAGES=POSIX" \
-           -e "LANGUAGE=en_US.UTF-8" \
-           -e "LC_CTYPE=en_US.UTF-8" \
-           -e "MYSQL_ROOT_PASSWORD=sotolito" \
-           sotolitolabs-alpine-arm-mariadb  /doinstall
+# Setup the mariadb container environment
+
+source ../../lib/containers.shlib
+source systemd/mariadb.env.${HOSTTYPE}
+
+IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
+
+echo "Setting put the mariadb container environment"
+
+MY_PW="sotolito"
+if [[ "${1}" != "" ]]; then
+  MY_PW=$1
+fi
+
+SUDO=$(check_if_sudo $CONTAINER_USER)
+$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
+
+echo "Running setup container"
+
+$SUDO podman run -ti --rm --name="mariadbsetup"   \
+  -v $HOST_DIR/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
+  -v $HOST_DIR/vols/mariadb/var/tmp/mariadb/:/var/tmp/mariadb/ \
+  -v $HOST_DIR/vols/mariadb/etc/mysql:/etc/mysql \
+  -v $HOST_DIR/vols/mariadb/run/mysqld:/run/mysqld/ \
+  -e LANG="en_US.UTF-8"\
+  -e LC_MESSAGES=POSIX \
+  -e LANGUAGE=en_US.UTF-8 \
+  -e LC_CTYPE=en_US.UTF-8 \
+  -e MYSQL_ROOT_PASSWORD="$MY_PW"\
+  $IMAGE_NAME  /doinstall
+
+echo "Setup systemd unit"
+sudo cp systemd/mariadb.env /etc/sotolito/
+sudo cp systemd/sotolito-mariadb.service /usr/lib/systemd/system/
 

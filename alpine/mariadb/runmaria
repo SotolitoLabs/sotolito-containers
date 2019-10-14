@@ -1,12 +1,28 @@
 #!/bin/bash
 
-docker run -d  --name="mariadb" -p 3306:3306    \
-           -v /var/sotolito/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
-           -v /var/sotolito/vols/mariadb/etc/mysql:/etc/mysql \
-           -v /var/sotolito/vols/mariadb/run/mysqld:/run/mysqld/ \
-           -e "LANG=en_US.UTF-8" \
-           -e "LC_MESSAGES=POSIX" \
-           -e "LANGUAGE=en_US.UTF-8" \
-           -e "LC_CTYPE=en_US.UTF-8" \
-           sotolitolabs-alpine-arm-mariadb 
+# This container should be run as the mariadb container user
+
+source ../../lib/containers.shlib
+source systemd/mariadb.env.${HOSTTYPE}
+
+IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
+
+if [[ "${1}" != "" ]]; then
+  HOST_DIR=$1
+fi
+
+# Run as the specified user
+
+SUDO=$(check_if_sudo $CONTAINER_USER)
+
+$SUDO /usr/bin/podman run -d  --name="mariadb" -p 127.0.0.1:3306:3306    \
+  -v $VOLUME_DIR/var/lib/mysql/:/var/lib/mysql/ \
+  -v $VOLUME_DIR/var/tmp/mariadb/:/var/tmp/mariadb/ \
+  -v $VOLUME_DIR/etc/mysql:/etc/mysql \
+  -v $VOLUME_DIR/run/mysqld:/run/mysqld/ \
+  -e LANG="en_US.UTF-8"\
+  -e LC_MESSAGES=POSIX \
+  -e LANGUAGE=en_US.UTF-8 \
+  -e LC_CTYPE=en_US.UTF-8 \
+  $IMAGE_NAME
 

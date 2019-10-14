@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Cleans mariadb database and directories from the sotolito volume space
+# Iván Chavero <ichavero@chavero.com.mx>
+#TODO: use variables
+
+echo "Deleting mariadb container"
+sudo -i -u sotolito-mariadb  podman stop mariadb 
+sudo -i -u sotolito-mariadb  podman rm mariadb
+echo "Deleting mariadb sotolito volume"
+sudo rm -rf /home/vservers/var_sotolito/vols/mariadb
+echo "Delete mariadb images"
+sudo -i -u sotolito-mariadb  podman rmi localhost/sotolitolabs-alpine-x86_64-mariadb:latest localhost/sotolitolabs-alpine-x86_64-mariadb:10.4.8
+
