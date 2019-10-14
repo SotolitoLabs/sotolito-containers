@@ -1,17 +1,13 @@
 #!/bin/bash
 
 source ../../lib/containers.shlib
-source systemd/mariadb.env
+source systemd/mariadb.env.${HOSTTYPE}
 
 BUILD_DIR=$(pwd)
 VERSION=10.4.8
 if [[ "${1}" != "" ]]; then
   VERSION=$1
 fi
-
-echo "Creating Container User"
-sudo groupadd $CONTAINER_GROUP
-sudo useradd -m -g $CONTAINER_GROUP -d /home/$CONTAINER_USER -c 'Sotolito sotolito-mariadb Container User' -s /bin/bash $CONTAINER_USER 
 
 IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
 
@@ -22,7 +18,6 @@ SUDO=$(check_if_sudo $CONTAINER_USER)
 echo "COMMAND: $SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION ${BUILD_DIR}"
 $SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION $BUILD_DIR
 $SUDO /usr/bin/podman tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
-
 
 
 
