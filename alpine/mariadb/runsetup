@@ -15,7 +15,8 @@ if [[ "${1}" != "" ]]; then
 fi
 
 SUDO=$(check_if_sudo $CONTAINER_USER)
-$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
+/usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
+chown $CONTAINER_USER:$CONTAINER_GROUP -R {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
 
 echo "Running setup container"
 
