@@ -1,0 +1,28 @@
+[Unit]
+Description=Sotolito Nginx Docker Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+EnvironmentFile=/etc/sotolito/nginx.env
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/docker rm ${CONTAINER_NAME}
+ExecStart=/usr/bin/docker run --name=${CONTAINER_NAME} -t -p 8080:80    \
+           -v /var/sotolito/vols/nginx/var:/var/ \
+           -v /var/sotolito/vols/nginx/etc/nginx:/etc/nginx \
+           -v /var/sotolito/vols/php-fpm/run/php-fpm/:/run/php-fpm/  \
+           -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/ \
+           -e "LANG=en_US.UTF-8" \
+           -e "LC_MESSAGES=POSIX" \
+           -e "LANGUAGE=en_US.UTF-8" \
+           -e "LC_CTYPE=en_US.UTF-8" \
+           ${IMAGE_NAME}
+
+ExecReload=-/usr/bin/docker stop ${CONTAINER_NAME}
+ExecReload=-/usr/bin/docker rm ${CONTAINER_NAME}
+ExecStop=-/usr/bin/docker stop ${CONTAINER_NAME}
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
