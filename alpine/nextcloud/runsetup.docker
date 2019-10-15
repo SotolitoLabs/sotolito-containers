@@ -1,0 +1,6 @@
+IMAGE_NAME="sotolitolabs-alpine-arm-nextcloud"
+
+docker run --rm --name="nextcloud-setup"  \
+           -v /var/sotolito:/var/sotolito \
+           $IMAGE_NAME
+
