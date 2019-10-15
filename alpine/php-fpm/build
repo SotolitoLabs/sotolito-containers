@@ -2,8 +2,9 @@
 
 VERSION=$1
 VERSION=7.1.15-r0
-docker build --no-cache -t sotolitolabs-alpine-arm-php-fpm:$VERSION .
+IMAGE_NAME="sotolitolabs-alpine-arm-php-fpm"
+docker build --no-cache -t $IMAGE_NAME:$VERSION .
 
-docker tag sotolitolabs-alpine-arm-php-fpm:$VERSION  sotolitolabs-alpine-arm-php-fpm:latest
+docker tag $IMAGE_NAME:$VERSION  $IMAGE_NAME:latest
 
 
