@@ -1,0 +1,23 @@
+[Unit]
+Description=Sotolito php-fpm Docker Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+EnvironmentFile=/etc/sotolito/php-fpm.env
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/docker rm ${CONTAINER_NAME}
+ExecStart=/usr/bin/docker run -t --name=${CONTAINER_NAME} -p 9000:9000  \
+         -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/  \
+         -v /var/sotolito/vols/php-fpm/etc/php7/:/etc/php7/             \
+         -v /var/sotolito/vols/php-fpm/var/lib/php7/:/var/lib/php7      \
+         ${IMAGE_NAME}
+
+ExecReload=-/usr/bin/docker stop ${CONTAINER_NAME}
+ExecReload=-/usr/bin/docker rm ${CONTAINER_NAME}
+ExecStop=-/usr/bin/docker stop ${CONTAINER_NAME}
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
