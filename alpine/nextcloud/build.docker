@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CURRENT_VERSION="16.0.5"
+IMAGE_NAME="sotolitolabs-alpine-arm-nextcloud"
+
+if [[ ${1} == "" ]]; then
+    VERSION=$CURRENT_VERSION
+else
+    VERSION=$1
+fi
+
+#docker build --no-cache -e NEXTCLOUD_VERSION=$VERSION  -t $IMAGE_NAME:$VERSION .
+docker build --no-cache -t $IMAGE_NAME:$VERSION .
+
+docker tag $IMAGE_NAME:$VERSION  $IMAGE_NAME:latest
+
