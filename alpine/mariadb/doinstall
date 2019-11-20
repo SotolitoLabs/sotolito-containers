@@ -3,21 +3,29 @@
 # This script should be run inside the mariadb container
 
 echo "Creating directories"
-chown mysql.mysql /var/lib/mysql
-mkdir /var/lib/mysql/mysql
-chown mysql.mysql /var/lib/mysql/mysql
-mkdir /var/lib/mysql/test
-chown mysql.mysql /var/lib/mysql/test
-mkdir /run/mysqld
-chown mysql.mysql /run/mysqld
-mkdir /var/tmp/mariadb
-chown mysql.mysql /var/tmp/mariadb
+
+if [ ! -d "/var/lib/mysql" ]; then
+  mkdir /var/lib/mysql/mysql
+fi
+
+if [ ! -d "/var/lib/mysql/test" ]; then
+  mkdir /var/lib/mysql/test
+fi
+
+if [ ! -d "/run/mysqld" ]; then
+  mkdir /run/mysqld
+fi
+
+if [ ! -d "/var/tmp/mariadb" ]; then
+  mkdir /var/tmp/mariadb
+fi
 
 cp /my.cnf /etc/mysql
 chown mysql.mysql /etc/mysql/my.cnf
 
 mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 su mysql -c mysqld &
+
 sleep 5
 
 echo "Granting privileges for external access"
