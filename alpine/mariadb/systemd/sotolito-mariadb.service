@@ -9,7 +9,7 @@ Group=sotolito-mariadb
 Type=simple
 TimeoutStartSec=5m
 ExecStartPre=-/usr/bin/podman rm "${CONTAINER_NAME}"
-ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" -p 127.0.0.1:3306:3306 \
+ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" --ulimit nofile=1024:6553 -p 127.0.0.1:3306:3306 \
   -v ${VOLUME_DIR}/var/lib/mysql/:/var/lib/mysql/ \
   -v ${VOLUME_DIR}/var/tmp/mariadb/:/var/tmp/mariadb/ \
   -v ${VOLUME_DIR}/etc/mysql:/etc/mysql \
