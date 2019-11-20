@@ -6,6 +6,8 @@ source ../../lib/containers.shlib
 source systemd/mariadb.env.${HOSTTYPE}
 
 IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
+MYSQL_UID="100"
+MYSQL_GID="101"
 
 echo "Setting put the mariadb container environment"
 
@@ -14,13 +16,30 @@ if [[ "${1}" != "" ]]; then
   MY_PW=$1
 fi
 
+# Check $VOLUME_DIR and make sure the sotolito group has write permissions
+
+if [ ! -d "${VOLUME_DIR}" ]; then
+	sudo mkdir $VOLUME_DIR
+fi
+
+sudo chgrp sotolito $VOLUME_DIR
+sudo chmod g+rw $VOLUME_DIR
+
 SUDO=$(check_if_sudo $CONTAINER_USER)
-/usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
-chown $CONTAINER_USER:$CONTAINER_GROUP -R {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
+$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/var/lib/mysql,$VOLUME_DIR/etc/mysql,$VOLUME_DIR/run/mysqld,$VOLUME_DIR/var/tmp/mariadb}
+sudo cp my.cnf.podman $VOLUME_DIR/etc/mysql/my.cnf
+sudo chown $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/etc/mysql/my.cnf
+
+#Have to use podman unshare so the mysql (UID=100, GID=101) user inside the container can write to the directory
+$SUDO podman unshare chown $MYSQL_UID:$MYSQL_GID $VOLUME_DIR/var/lib/mysql
+$SUDO podman unshare chown $MYSQL_UID:$MYSQL_GID $VOLUME_DIR/run/mysqld
+$SUDO podman unshare chown $MYSQL_UID:$MYSQL_GID $VOLUME_DIR/var/tmp/mariadb
+
+#sudo chown $CONTAINER_USER:$CONTAINER_GROUP -R "${VOLUME_DIR}"
 
 echo "Running setup container"
 
-$SUDO podman run -ti --rm --name="mariadbsetup"   \
+$SUDO podman run -ti --rm --ulimit nofile=1024:65535 --name="mariadbsetup"   \
   -v $HOST_DIR/vols/mariadb/var/lib/mysql/:/var/lib/mysql/ \
   -v $HOST_DIR/vols/mariadb/var/tmp/mariadb/:/var/tmp/mariadb/ \
   -v $HOST_DIR/vols/mariadb/etc/mysql:/etc/mysql \
@@ -33,6 +52,6 @@ $SUDO podman run -ti --rm --name="mariadbsetup"   \
   $IMAGE_NAME  /doinstall
 
 echo "Setup systemd unit"
-sudo cp systemd/mariadb.env /etc/sotolito/
+sudo cp systemd/mariadb.env.${ARCH} /etc/sotolito/
 sudo cp systemd/sotolito-mariadb.service /usr/lib/systemd/system/
 
