@@ -1,26 +1,31 @@
 FROM  alpine
-MAINTAINER Leonel Nunez "leonel@enelserver.com"
+ENV SOTOLITO_NGINX_VERSION=1.14.2-r4 \
+    SUMMARY="SotolitoLabs nginx Image" \
+    DESCRIPTION="nginx image for the SotolitoOS environment"
 
-RUN apk --no-cache update && \
-apk upgrade &&\
-apk add nginx tzdata
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
+      io.k8s.display-name="SotolitoOS nginx 1.14.2-r4" \
+      io.openshift.expose-services="80:sotolito-nginx" \
+      io.openshift.tags="web,sotolitoos,nginx" \
+      name="sotolito/nginx" \
+      version="1.14.2-r4" \
+      usage="docker run -d -e -p 80:80 sotolitoos/nginx" \
+      maintainer="Iván Chavero <ichavero@chavero.com.mx>"
 
-RUN cp /usr/share/zoneinfo/America/Chihuahua /etc/localtime
-RUN echo "America/Chihuahua" >/etc/timezone
+RUN apk --no-cache update                                  && \
+  apk upgrade                                              && \
+  apk add nginx tzdata                                     && \
+  cp /usr/share/zoneinfo/America/Chihuahua /etc/localtime  && \
+  echo "America/Chihuahua" >/etc/timezone                  && \
+  apk del tzdata                                           && \
+  rm -rf /var/cache/apk                                    && \
+  mkdir /run/nginx
 
-RUN apk del tzdata
-RUN rm -rf /var/cache/apk
-
-
-RUN mkdir /run/nginx
-
-#RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-#&& ln -sf /dev/stderr /var/log/nginx/error.log
-
+COPY volconf.tar.bz2 /
+COPY setup.sh /
 
 EXPOSE 80 443
 
-
-cmd ["nginx", "-g", "daemon off;"]
-
-#cmd ["sh"]
+cmd ["/usr/sbin/nginx", "-g", "daemon off;"]
