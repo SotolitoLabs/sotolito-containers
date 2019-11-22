@@ -2,6 +2,7 @@
 
 # Global vars
 HOST_DIR="/var/sotolito"
+BUILD_DIR="$(pwd)/${PROGRAM}"
 
 function check_user() {
   local exist=$(grep $1 /etc/passwd)
