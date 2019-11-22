@@ -1,4 +1,4 @@
-FROM  alpine
+FROM alpine
 ENV SOTOLITO_NGINX_VERSION=1.14.2-r4 \
     SUMMARY="SotolitoLabs nginx Image" \
     DESCRIPTION="nginx image for the SotolitoOS environment"
@@ -23,7 +23,6 @@ RUN apk --no-cache update                                  && \
   rm -rf /var/cache/apk                                    && \
   mkdir /run/nginx
 
-COPY volconf.tar.bz2 /
 COPY setup.sh /
 
 EXPOSE 80 443
