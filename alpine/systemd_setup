@@ -1,0 +1,40 @@
+#!/bin/bash
+
+
+if [[ "${1}" == "" ]]; then
+  echo "Usage: build <program_name> [version]" 
+  exit
+fi
+
+PROGRAM=$1
+
+source ../lib/containers.shlib
+source "${PROGRAM}/systemd/${PROGRAM}.env.${HOSTTYPE}"
+
+echo "Creating Container User"
+sudo groupadd $CONTAINER_GROUP
+sudo useradd -m -g $CONTAINER_GROUP -d /home/$CONTAINER_USER -c "Sotolito sotolito-${PROGRAM} Container User" -s /bin/bash $CONTAINER_USER 
+sudo usermod -a -G sotolito $CONTAINER_USER
+
+./build_image $PROGRAM $2
+cd $PROGRAM
+./setup_container
+
+
+echo "Setup systemd unit"
+
+if [[ ! -d /etc/sotolito/ ]]; then
+  mkdir /etc/sotolito
+fi
+
+sudo cp "systemd/sotolito-${PROGRAM}.service" "/usr/lib/systemd/system/sotolito-${PROGRAM}.service"
+sudo cp "systemd/${PROGRAM}.env.${HOSTTYPE}" /etc/sotolito/
+sudo ln -s "/etc/sotolito/${PROGRAM}.env.${HOSTTYPE}" /etc/sotolito/nginx.env
+
+sudo systemctl daemon-reload
+
+echo "To run execute: systemctl start sotolito-${PROGRAM}"
+
+
+
+
