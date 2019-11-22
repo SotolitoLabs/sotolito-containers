@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [[ "${1}" == "" ]]; then
+  echo "Usage: build <program_name> [version]" 
+  exit
+fi
+
+PROGRAM=$1
+
+source ../lib/containers.shlib
+source "${PROGRAM}/systemd/${PROGRAM}.env.${HOSTTYPE}"
+
+VERSION="1.0"
+if [[ "${2}" != "" ]]; then
+  VERSION=$2
+fi
+
+IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-${PROGRAM}"
+
+echo "Creating ${PROGRAM} image ${IMAGE_NAME}"
+
+SUDO=$(check_if_sudo $CONTAINER_USER)
+
+echo "COMMAND: $SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION ${BUILD_DIR}"
+$SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION $BUILD_DIR
+$SUDO /usr/bin/podman tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+
