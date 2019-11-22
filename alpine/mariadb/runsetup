@@ -9,7 +9,7 @@ IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
 MYSQL_UID="100"
 MYSQL_GID="101"
 
-echo "Setting put the mariadb container environment"
+echo "Setting up the mariadb container environment"
 
 MY_PW="sotolito"
 if [[ "${1}" != "" ]]; then
