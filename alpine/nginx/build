@@ -1,15 +1,20 @@
 #!/bin/bash
 
-VERSION=$1
-VERSION=1.16.1-r0
-docker build --no-cache  -t sotolitolabs-alpine-arm-nginx:$VERSION .
+source ../../lib/containers.shlib
+source systemd/nginx.env.${HOSTTYPE}
 
-docker tag sotolitolabs-alpine-arm-nginx:$VERSION sotolitolabs-alpine-arm-nginx:latest
+VERSION="1.14.2-r4"
+if [[ "${1}" != "" ]]; then
+  VERSION=$1
+fi
 
-#docker tag sotolitolabs-alpine-arm-nginx:$VERSION  hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:$VERSION
-#docker tag sotolitolabs-alpine-arm-nginx:$VERSION hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:latest
-#docker push hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:latest
-#docker push hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:$VERSION
+IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-nginx"
 
+echo "Creating nginx image ${IMAGE_NAME}"
 
+SUDO=$(check_if_sudo $CONTAINER_USER)
+
+echo "COMMAND: $SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION ${BUILD_DIR}"
+$SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION $BUILD_DIR
+$SUDO /usr/bin/podman tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
 
