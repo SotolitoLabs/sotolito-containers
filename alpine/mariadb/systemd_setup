@@ -6,6 +6,7 @@ source systemd/mariadb.env.${HOSTTYPE}
 echo "Creating Container User"
 sudo groupadd $CONTAINER_GROUP
 sudo useradd -m -g $CONTAINER_GROUP -d /home/$CONTAINER_USER -c 'Sotolito sotolito-mariadb Container User' -s /bin/bash $CONTAINER_USER 
+sudo usermod -a -G sotolito $CONTAINER_USER
 
 ./build
 ./runsetup $1
@@ -18,7 +19,7 @@ fi
 
 sudo cp systemd/sotolito-mariadb.service /usr/lib/systemd/system/sotolito-mariadb.service
 sudo cp "systemd/mariadb.env.${HOSTTYPE}" /etc/sotolito/
-sudo cd /etc/sotolito/; ln -s "mariadb.env.${HOSTTYPE}" mariadb.env
+sudo ln -s "/etc/sotolito/mariadb.env.${HOSTTYPE}" /etc/sotolito/mariadb.env
 
 sudo systemctl daemon-reload
 
