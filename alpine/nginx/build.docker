@@ -1,0 +1,15 @@
+#!/bin/bash
+
+VERSION=$1
+VERSION=1.16.1-r0
+docker build --no-cache  -t sotolitolabs-alpine-arm-nginx:$VERSION .
+
+docker tag sotolitolabs-alpine-arm-nginx:$VERSION sotolitolabs-alpine-arm-nginx:latest
+
+#docker tag sotolitolabs-alpine-arm-nginx:$VERSION  hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:$VERSION
+#docker tag sotolitolabs-alpine-arm-nginx:$VERSION hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:latest
+#docker push hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:latest
+#docker push hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx:$VERSION
+
+
+
