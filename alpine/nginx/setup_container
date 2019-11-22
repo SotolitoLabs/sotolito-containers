@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Setup the mariadb container environment
+# Setup the nginx container environment
 
 source ../../lib/containers.shlib
 source systemd/nginx.env.${HOSTTYPE}
