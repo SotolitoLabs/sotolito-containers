@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Setup the mariadb container environment
+
+source ../../lib/containers.shlib
+source systemd/nginx.env.${HOSTTYPE}
+
+echo "Setting up the nginx container environment"
+
+MY_PW="sotolito"
+if [[ "${1}" != "" ]]; then
+  MY_PW=$1
+fi
+
+# Check $VOLUME_DIR and make sure the sotolito group has write permissions
+
+if [ ! -d "${VOLUME_DIR}" ]; then
+	sudo mkdir $VOLUME_DIR
+fi
+
+sudo chgrp sotolito $VOLUME_DIR
+sudo chmod g+rw $VOLUME_DIR
+
+
+SUDO=$(check_if_sudo $CONTAINER_USER)
+
+# Create also the php-fph and php-apps volumes
+$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/../php-fpm/run/php-fpm,$VOLUME_DIR/../php-apps}
+$SUDO tar xvf "${BUILD_DIR}/volconf.tar.bz2"  -C "${VOLUME_DIR}" --strip 2
+
+sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR
+sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/../php-fpm
+sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/../php-apps
+
+#Have to use podman unshare so the mysql (UID=100, GID=101) user inside the container can write to the directory
+$SUDO podman unshare chown -R ${ALPINE_NGINX_UID}:${ALPINE_NGINX_GID} $VOLUME_DIR
+$SUDO podman unshare chown -R ${ALPINE_NGINX_UID}:${ALPINE_NGINX_GID} $VOLUME_DIR/../php-fpm
+$SUDO podman unshare chown -R ${ALPINE_NGINX_UID}:${ALPINE_NGINX_GID} $VOLUME_DIR/../php-apps
+
+#sudo chown $CONTAINER_USER:$CONTAINER_GROUP -R "${VOLUME_DIR}"
+
+echo "Setup systemd unit"
+sudo cp systemd/nginx.env.${ARCH} /etc/sotolito/
+sudo cp systemd/sotolito-nginx.service /usr/lib/systemd/system/
+
+
+
