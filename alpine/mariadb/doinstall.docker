@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# This script should be run inside the mariadb container
+
+echo "Creating directories"
+
+if [ ! -d "/var/lib/mysql" ]; then
+  mkdir /var/lib/mysql/mysql
+fi                                    
+                                      
+if [ ! -d "/var/lib/mysql/test" ]; then
+  mkdir /var/lib/mysql/test    
+fi                                   
+                                       
+if [ ! -d "/run/mysqld" ]; then                   
+  mkdir /run/mysqld         
+fi                                
+                                   
+if [ ! -d "/var/tmp/mariadb" ]; then 
+  mkdir /var/tmp/mariadb                                       
+fi   
+
+
+
+cp /my.cnf /etc/mysql
+chown mysql.mysql /etc/mysql/my.cnf
+
+mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+#su mysql -c mysqld &
+/usr/bin/mysqld &
+
+sleep 5
+
+echo "Granting privileges for external access"
+echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  identified by '${MYSQL_ROOT_PASSWORD}';" > /grant.sql 
+echo "flush privileges;" >> /grant.sql
+mysql -u root  < /grant.sql
+
+/usr/bin/mysqladmin -u root password $MYSQL_ROOT_PASSWORD
