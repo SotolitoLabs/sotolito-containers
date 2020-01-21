@@ -6,6 +6,32 @@ docker build --no-cache  -t sotolitolabs-alpine-arm-nginx-setup:$VERSION .
 
 docker tag sotolitolabs-alpine-arm-nginx-setup:$VERSION  sotolitolabs-alpine-arm-nginx-setup:latest
 
+
+
+
+source ../../lib/containers.shlib
+source systemd/nginx.env.${HOSTTYPE}
+
+BUILD_DIR=$(pwd)
+VERSION=1.14.2-r4
+if [[ "${1}" != "" ]]; then
+  VERSION=$1
+fi
+
+IMAGE_NAME="sotolitolabs-alpine-${HOSTTYPE}-mariadb"
+
+echo "Creating mariadb image ${IMAGE_NAME}"
+
+SUDO=$(check_if_sudo $CONTAINER_USER)
+
+echo "COMMAND: $SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION ${BUILD_DIR}"
+$SUDO /usr/bin/podman build --no-cache  -t $IMAGE_NAME:$VERSION $BUILD_DIR
+$SUDO /usr/bin/podman tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+
+
+
+
+
 #docker tag sotolitolabs-alpine-arm-nginx-setup:$VERSION  hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx-setup:$VERSION
 #docker tag sotolitolabs-alpine-arm-nginx-setup:$VERSION hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx-setup:latest
 #docker push hub.enelserver.com:5000/sotolitolabs-alpine-arm-nginx-setup:latest
