@@ -13,5 +13,5 @@ RUN apk del tzdata
 RUN rm -rf /var/cache/apk
 
 
-cmd ["php-fpm7"]
+cmd ["/usr/sbin/php-fpm7"]
 
