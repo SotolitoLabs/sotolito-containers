@@ -11,6 +11,14 @@ PROGRAM=$1
 source ../lib/containers.shlib
 source "${PROGRAM}/systemd/${PROGRAM}.env.${HOSTTYPE}"
 
+# Check $VOLUME_DIR and make sure the sotolito group has write permissions
+if [ ! -d "${VOLUME_DIR}" ]; then
+  sudo mkdir $VOLUME_DIR
+fi
+sudo chgrp sotolito $VOLUME_DIR
+sudo chmod g+rw $VOLUME_DIR
+
+
 echo "Creating Container User"
 sudo groupadd $CONTAINER_GROUP
 sudo useradd -m -g $CONTAINER_GROUP -d /home/$CONTAINER_USER -c "Sotolito sotolito-${PROGRAM} Container User" -s /bin/bash $CONTAINER_USER 
@@ -29,7 +37,7 @@ fi
 
 sudo cp "systemd/sotolito-${PROGRAM}.service" "/usr/lib/systemd/system/sotolito-${PROGRAM}.service"
 sudo cp "systemd/${PROGRAM}.env.${HOSTTYPE}" /etc/sotolito/
-sudo ln -s "/etc/sotolito/${PROGRAM}.env.${HOSTTYPE}" /etc/sotolito/nginx.env
+sudo ln -s "/etc/sotolito/${PROGRAM}.env.${HOSTTYPE}" /etc/sotolito/${PROGRAM}.env
 
 sudo systemctl daemon-reload
 
