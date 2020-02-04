@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Setup the php-fpm container environment
+
+source ../../lib/containers.shlib
+source systemd/php-fpm.env.${HOSTTYPE}
+
+echo "Setting up the php-fpm container environment"
+
+MY_PW="sotolito"
+if [[ "${1}" != "" ]]; then
+  MY_PW=$1
+fi
+
+SUDO=$(check_if_sudo $CONTAINER_USER)
+
+# Create also the php-fph and php-apps volumes
+$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/../php-fpm/run/php-fpm,$VOLUME_DIR/../php-apps}
+$SUDO tar xvf "${BUILD_DIR}/volconf.tar.bz2"  -C "${VOLUME_DIR}" --strip 2
+
+sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR
+sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/../php-fpm
+sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/../php-apps
+
+$SUDO ${BUILD_DIR}/etc/php-fpm.conf.podman $VOLUME_DIR/../nginx/../nginx/etc/nginx/conf.d/php-fpm.conf
+
+#Have to use podman unshare so the nginx (UID=100, GID=101) user inside the container can write to the directory
+$SUDO podman unshare chown -R ${ALPINE_NGINX_UID}:${ALPINE_NGINX_GID} $VOLUME_DIR
+$SUDO podman unshare chown -R ${ALPINE_NGINX_UID}:${ALPINE_NGINX_GID} $VOLUME_DIR/../php-fpm
+$SUDO podman unshare chown -R ${ALPINE_NGINX_UID}:${ALPINE_NGINX_GID} $VOLUME_DIR/../php-apps
+
+echo "Setup systemd unit"
+sudo cp systemd/php-fpm.env.${ARCH} /etc/sotolito/
+sudo cp systemd/sotolito-php-fpm.service /usr/lib/systemd/system/
+
+
+
