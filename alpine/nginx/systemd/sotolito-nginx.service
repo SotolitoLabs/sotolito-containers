@@ -6,10 +6,12 @@ After=network.target
 EnvironmentFile=/etc/sotolito/nginx.env
 User=sotolito-nginx
 Group=sotolito-nginx
+CPUWeight=${CPU_WEIGHT}
+MemoryLimit=${MEMORY_LIMIT}
 Type=simple
 TimeoutStartSec=5m
 ExecStartPre=-/usr/bin/podman rm ${CONTAINER_NAME}
-ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" --ulimit nofile=1024:6553 -p 127.0.0.1:8080:80 \
+ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" --pod new:web --ulimit nofile=1024:6553 -p 127.0.0.1:8080:80 \
            -v /var/sotolito/vols/nginx/var:/var/ \
            -v /var/sotolito/vols/nginx/etc/nginx:/etc/nginx \
            -v /var/sotolito/vols/php-fpm/run/php-fpm/:/run/php-fpm/  \
