@@ -6,6 +6,8 @@ After=network.target
 EnvironmentFile=/etc/sotolito/mariadb.env
 User=sotolito-mariadb
 Group=sotolito-mariadb
+CPUWeight=${CPU_WEIGHT}
+MemoryLimit=${MEMORY_LIMIT}
 Type=simple
 TimeoutStartSec=5m
 ExecStartPre=-/usr/bin/podman rm "${CONTAINER_NAME}"
@@ -22,7 +24,7 @@ ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" --ulimit nofile=1024
 
 ExecReload=-/usr/bin/podman stop "${CONTAINER_NAME}"
 ExecReload=-/usr/bin/podman rm "${CONTAINER_NAME}"
-ExecStop=-/usr/bin/podman stop "${CONTAINER_NAME}"
+ExecStop=/usr/bin/podman stop "${CONTAINER_NAME}"
 Restart=always
 RestartSec=30
 
