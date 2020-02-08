@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+./systemd_setup nginx 1.14.2-r4
+./systemd_setup php-fpm 7.2.24-r0
+
