@@ -15,13 +15,14 @@ fi
 SUDO=$(check_if_sudo $CONTAINER_USER)
 
 # Create also the php-fph and php-apps volumes
-$SUDO /usr/bin/mkdir -p {$VOLUME_DIR/../php-fpm/run/php-fpm,$VOLUME_DIR/../php-apps}
-$SUDO tar xvf "${BUILD_DIR}/volconf.tar.bz2"  -C "${VOLUME_DIR}" --strip 2
+sudo /usr/bin/mkdir -p {$VOLUME_DIR/../php-fpm/run/php-fpm,$VOLUME_DIR/../php-apps}
 
 sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR
 sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/../php-fpm
 sudo chown -R $CONTAINER_USER:$CONTAINER_GROUP $VOLUME_DIR/../php-apps
 
+echo "Extracting volume configuration"
+$SUDO tar xvf "${BUILD_DIR}/volconf.tar.bz2"  -C "${VOLUME_DIR}" --strip 2
 $SUDO ${BUILD_DIR}/etc/php-fpm.conf.podman $VOLUME_DIR/../nginx/../nginx/etc/nginx/conf.d/php-fpm.conf
 
 #Have to use podman unshare so the nginx (UID=100, GID=101) user inside the container can write to the directory
