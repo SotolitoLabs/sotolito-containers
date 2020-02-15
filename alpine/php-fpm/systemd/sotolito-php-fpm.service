@@ -20,7 +20,7 @@ ExecStart=/usr/bin/podman run -t --name=${CONTAINER_NAME} --pod new:web --ulimit
 
 ExecReload=-/usr/bin/podman stop ${CONTAINER_NAME}
 ExecReload=-/usr/bin/podman rm ${CONTAINER_NAME}
-ExecStop=-/usr/bin/podman stop ${CONTAINER_NAME}
+ExecStop=-/usr/bin/podman pod rm -rf web
 Restart=always
 RestartSec=30
 
