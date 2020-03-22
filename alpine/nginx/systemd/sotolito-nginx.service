@@ -11,8 +11,9 @@ CPUWeight=200
 MemoryLimit=512M
 Type=simple
 TimeoutStartSec=5m
-ExecStartPre=-/usr/bin/podman rm ${CONTAINER_NAME}
-ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" --pod web --ulimit nofile=1024:6553 \
+ExecStartPre=-/usr/bin/podman stop ${CONTAINER_NAME}
+ExecStartPre=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
+ExecStart=/usr/bin/podman run --rm -t --name="${CONTAINER_NAME}" --pod web --ulimit nofile=1024:6553 \
            -v /var/sotolito/vols/nginx/var:/var/                         \
            -v /var/sotolito/vols/nginx/etc/nginx:/etc/nginx              \
            -v /var/sotolito/vols/php-fpm/run/php-fpm/:/run/php-fpm/      \
@@ -25,7 +26,7 @@ ExecStart=/usr/bin/podman run -t --name="${CONTAINER_NAME}" --pod web --ulimit n
            ${IMAGE_NAME}
 
 ExecReload=-/usr/bin/podman stop ${CONTAINER_NAME}
-ExecReload=-/usr/bin/podman rm ${CONTAINER_NAME}
+ExecReload=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
 ExecStop=-/usr/bin/podman stop ${CONTAINER_NAME}
 Restart=always
 RestartSec=30
