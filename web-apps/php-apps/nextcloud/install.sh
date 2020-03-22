@@ -45,5 +45,6 @@ $SUDO podman cp ${CURRENT_DIR}/etc/nextcloud_nginx.conf ${CONTAINER_NAME}:/etc/n
 $SUDO podman cp ${CURRENT_DIR}/setup.sh ${CONTAINER_NAME}:/setup.sh
 $SUDO podman exec -ti ${CONTAINER_NAME} /setup.sh
 
+# Restart HTTP server so it loads the nextcloud configurations
 sudo systemctl restart ${CONTAINER_SERVICE_NAME}
 echo "Go to: http://<your_domain>/php-apps/nextcloud to finis installation"
