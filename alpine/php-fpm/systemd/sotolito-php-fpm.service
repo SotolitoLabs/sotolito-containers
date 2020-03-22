@@ -11,8 +11,11 @@ CPUWeight=150
 MemoryLimit=512M
 Type=simple
 TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman stop ${CONTAINER_NAME}
+ExecStartPre=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
+ExecStartPre=-/usr/bin/podman pod stop web
 ExecStartPre=-/usr/bin/podman pod rm -f web
-ExecStart=/usr/bin/podman run -t --name=${CONTAINER_NAME} --pod new:web --ulimit nofile=1024:6553 -p 127.0.0.1:9000:9000  \
+ExecStart=/usr/bin/podman run -t --rm --name=${CONTAINER_NAME} --pod new:web --ulimit nofile=1024:6553 -p 127.0.0.1:9000:9000  \
          -p 127.0.0.1:8080:80                                           \
          -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/  \
          -v /var/sotolito/vols/php-fpm/etc/php7/:/etc/php7/             \
@@ -21,8 +24,13 @@ ExecStart=/usr/bin/podman run -t --name=${CONTAINER_NAME} --pod new:web --ulimit
          ${IMAGE_NAME}
 
 ExecReload=-/usr/bin/podman stop ${CONTAINER_NAME}
-ExecReload=-/usr/bin/podman rm ${CONTAINER_NAME}
-ExecStop=-/usr/bin/podman pod rm -rf web
+ExecReload=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
+ExecReload=-/usr/bin/podman pod stop web
+ExecReload=-/usr/bin/podman pod rm -f web
+ExecStop=-/usr/bin/podman stop ${CONTAINER_NAME}
+ExecStop=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
+ExecStop=-/usr/bin/podman pod stop web
+ExecStop=-/usr/bin/podman pod rm -f web
 Restart=always
 RestartSec=30
 
