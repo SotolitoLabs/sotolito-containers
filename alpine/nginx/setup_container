@@ -7,11 +7,6 @@ source systemd/nginx.env.${HOSTTYPE}
 
 echo "Setting up the nginx container environment"
 
-MY_PW="sotolito"
-if [[ "${1}" != "" ]]; then
-  MY_PW=$1
-fi
-
 SUDO=$(check_if_sudo ${CONTAINER_USER})
 
 # Create also the php-fph and php-apps volumes
