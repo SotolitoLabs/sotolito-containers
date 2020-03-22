@@ -22,10 +22,6 @@ if  [[ "${2}" != "" ]]; then
     NEXTCLOUD_PW=$2
 fi
 
-if  [[ "${3}" != "" ]]; then
-    NEXTCLOUD_URL=$3
-fi
-
 SUDO=$(check_if_sudo $CONTAINER_USER)
 
 if [[ "$(check_container ${CONTAINER_NAME})" == "" ]]; then
