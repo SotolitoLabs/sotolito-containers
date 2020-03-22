@@ -22,6 +22,8 @@ function check_if_sudo() {
   if [[ "${USER}" != "${1}" ]]; then
     echo "sudo -i -u ${1} "
   fi
+}
 
-
+function check_container() {
+    echo $($SUDO podman ps --filter "name=$1" --format "{{.ID}}")
 }
