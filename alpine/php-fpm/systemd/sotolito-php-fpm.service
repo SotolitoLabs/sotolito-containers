@@ -34,5 +34,10 @@ ExecStop=-/usr/bin/podman pod rm -f web
 Restart=always
 RestartSec=30
 
+# If any of the ExecStart tasks fail, then ExecStopPost will run
+ExecStopPost=podman system prune
+ExecStopPost=podman system migrate
+
+
 [Install]
 WantedBy=multi-user.target
