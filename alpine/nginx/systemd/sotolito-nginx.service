@@ -2,6 +2,7 @@
 Description=Sotolito Nginx Podman Container
 Requires=sotolito-php-fpm.service
 After=network.target sotolito-php-fpm.service
+# Do we want to restart when php-fpm is restarted? PartOf=sotolito-php-fpm.service
 
 [Service]
 EnvironmentFile=/etc/sotolito/nginx.env
@@ -30,6 +31,11 @@ ExecReload=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
 ExecStop=-/usr/bin/podman stop ${CONTAINER_NAME}
 Restart=always
 RestartSec=30
+
+# If any of the ExecStart tasks fail, then ExecStopPost will run
+ExecStopPost=podman system prune
+ExecStopPost=podman system migrate
+
 
 [Install]
 WantedBy=multi-user.target
