@@ -15,8 +15,8 @@ ExecStartPre=-/usr/bin/podman stop ${CONTAINER_NAME}
 ExecStartPre=-/usr/bin/podman rm --storage --force ${CONTAINER_NAME}
 ExecStartPre=-/usr/bin/podman pod stop web
 ExecStartPre=-/usr/bin/podman pod rm -f web
-ExecStart=/usr/bin/podman run -t --rm --name=${CONTAINER_NAME} --pod new:web --ulimit nofile=1024:6553 -p 127.0.0.1:9000:9000  \
-         -p 127.0.0.1:8080:80                                           \
+ExecStart=/usr/bin/podman run -t --rm --name=${CONTAINER_NAME} --pod new:web --ulimit nofile=1024:65535 -p 127.0.0.1:9000:9000  \
+         -p 127.0.0.1:8081:80                                           \
          -v /var/sotolito/vols/php-apps/:/var/lib/nginx/html/php-apps/  \
          -v /var/sotolito/vols/php-fpm/etc/php7/:/etc/php7/             \
          -v /var/sotolito/vols/php-fpm/var/lib/php7/:/var/lib/php7      \
@@ -35,7 +35,7 @@ Restart=always
 RestartSec=30
 
 # If any of the ExecStart tasks fail, then ExecStopPost will run
-ExecStopPost=podman system prune
+ExecStopPost=podman system -f prune
 ExecStopPost=podman system migrate
 
 
