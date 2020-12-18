@@ -1,0 +1,18 @@
+[Unit]
+Description=Sotolito Gogs Service
+After=network.target
+
+[Service]
+EnvironmentFile=/home/gogs/gogs.env
+User=git
+Group=git
+CPUWeight=200
+MemoryLimit=512M
+Type=simple
+TimeoutStartSec=5m
+ExecStart=/home/gogs/gogs web
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
