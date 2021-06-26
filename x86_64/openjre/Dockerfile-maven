@@ -1,0 +1,49 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+
+ENV SOTOLITO_ADOPTOPENJDK_VERSION=14.1        \
+    SUMMARY="SotolitoLabs AdoptOpenJDK JDK Maven Image" \
+    DESCRIPTION="AdoptOpenJDK JDK Maven image for the SotolitoOS environment"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
+      io.k8s.display-name="SotolitoOS AdoptOpenJDK 14 (Maven)" \
+      io.openshift.expose-services="80:sotolito-openjdk" \
+      io.openshift.tags="web,sotolitoos,openjdk,maven" \
+      name="sotolito/openjdk-maven" \
+      version="14.1" \
+      usage="podman run -d -e -p 80:80 sotolitolabs/openjdk-maven" \
+      maintainer="Iván Chavero <ichavero@chavero.com.mx>"
+
+ENV MAVEN_HOME /opt/maven
+
+ENV MAVEN_DOWNLOAD_URL "https://downloads.apache.org/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz"
+
+ENV JAVA_HOME /opt/openjre-14
+ENV PATH $JAVA_HOME/bin:$PATH
+ENV JDK_DOWNLOAD_URL "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk14u-2020-07-28-07-34/OpenJDK14U-jdk_x64_linux_openj9_2020-07-28-07-34.tar.gz"
+
+ENV JAVA_VERSION 14
+
+RUN set -eux                                        && \
+    microdnf install -y tar gzip                    && \
+    microdnf clean all                              && \
+    curl -L -o openjre.tgz ${JDK_DOWNLOAD_URL}    && \
+    mkdir -p "${JAVA_HOME}"                         && \
+    tar --extract                                      \
+      --file openjre.tgz                               \
+      --directory "${JAVA_HOME}"                       \
+      --strip-components 1                             \
+      --no-same-owner                               && \
+    rm openjre.tgz                                  && \
+    curl -L -o maven.tgz ${MAVEN_DOWNLOAD_URL}            && \
+    mkdir -p "${MAVEN_HOME}"                        && \
+    tar --extract                                      \
+      --file maven.tgz                                 \
+      --directory "${MAVEN_HOME}"                      \
+      --strip-components 1                             \
+      --no-same-owner;                                 \
+    rm maven.tgz                                    && \
+    echo 'export PATH=$MAVEN_HOME/bin:$JAVA_HOME/bin:$PATH' >> /etc/bashrc && \
+    echo 'export PATH=$MAVEN_HOME/bin:$JAVA_HOME/bin:$PATH' >> /etc/profile.d/sh.local
+

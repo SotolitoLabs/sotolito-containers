@@ -1,0 +1,35 @@
+FROM registry.centos.org/centos:8
+
+ENV SOTOLITO_ADOPTOPENJDK_VERSION=14        \
+    SUMMARY="SotolitoLabs AdoptOpenJDK JDK Image" \
+    DESCRIPTION="AdoptOpenJDK JDK image for the SotolitoOS environment"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
+      io.k8s.display-name="SotolitoOS AdoptOpenJDK 14" \
+      io.openshift.expose-services="80:sotolito-openjdk" \
+      io.openshift.tags="web,sotolitoos,openjdk" \
+      name="sotolito/openjdk" \
+      version="14" \
+      usage="podman run -d -e -p 80:80 sotolitolabs/openjdk" \
+      maintainer="Iván Chavero <ichavero@chavero.com.mx>"
+
+ENV JAVA_HOME /opt/openjdk-14
+ENV PATH $JAVA_HOME/bin:$PATH
+ENV DOWNLOAD_URL "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk14u-2020-07-28-07-34/OpenJDK14U-jdk_x64_linux_openj9_2020-07-28-07-34.tar.gz"
+
+ENV JAVA_VERSION 14
+
+RUN set -eux;                                 \
+    curl -L -o openjdk.tgz ${DOWNLOAD_URL};   \
+    mkdir -p "${JAVA_HOME}";                  \
+    tar --extract                             \
+      --file openjdk.tgz                      \
+      --directory "${JAVA_HOME}"              \
+      --strip-components 1                    \
+      --no-same-owner;                        \
+    rm openjdk.tgz;                           \
+    echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/bashrc
+
+

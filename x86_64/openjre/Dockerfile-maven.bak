@@ -1,0 +1,32 @@
+FROM quay.io/sotolitolabs/adoptopenjdk-jdk:14
+
+ENV SOTOLITO_ADOPTOPENJDK_VERSION=14        \
+    SUMMARY="SotolitoLabs AdoptOpenJDK JDK Maven Image" \
+    DESCRIPTION="AdoptOpenJDK JDK Maven image for the SotolitoOS environment"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
+      io.k8s.display-name="SotolitoOS AdoptOpenJDK 14 (Maven)" \
+      io.openshift.expose-services="80:sotolito-openjdk" \
+      io.openshift.tags="web,sotolitoos,openjdk,maven" \
+      name="sotolito/openjdk-maven" \
+      version="14" \
+      usage="podman run -d -e -p 80:80 sotolitolabs/openjdk-maven" \
+      maintainer="Iván Chavero <ichavero@chavero.com.mx>"
+
+ENV MAVEN_HOME /opt/maven
+
+ENV DOWNLOAD_URL "https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz"
+
+RUN set -eux;                                 \
+    curl -L -o maven.tgz ${DOWNLOAD_URL};   \
+    mkdir -p "${MAVEN_HOME}";                  \
+    tar --extract                             \
+      --file maven.tgz                         \
+      --directory "${MAVEN_HOME}"              \
+      --strip-components 1                    \
+      --no-same-owner;                        \
+    rm maven.tgz;                             \
+    echo 'export PATH=$MAVEN_HOME/bin:$PATH' >> /etc/bashrc
+
