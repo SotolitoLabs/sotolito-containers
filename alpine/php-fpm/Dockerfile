@@ -1,10 +1,9 @@
-FROM  alpine
+FROM  alpine:3.16
 MAINTAINER Leonel Nunez "leonel@enelserver.com"
 
 RUN apk --no-cache update && \
 apk upgrade --no-cache &&\
-apk ---no-cache add php7-fpm php7-xml php7-pgsql php7-opcache php7-mbstring php7-json php7-intl tzdata php7-session php7-pdo php7-pdo_pgsql php7-openssl php7-iconv php7-exif php7-dom php7-pdo_mysql php7-zip php7-xml php7-xmlwriter php7-xmlreader php7-ctype php7-gd php7-zlib php7-simplexml php7-curl php7-fileinfo php7-ldap php7-mysqli php7-posix php7-phar
-#php7-imagick
+apk --no-cache add php8-fpm php8-xml php8-pgsql php8-opcache php8-mbstring php8-json php8-intl tzdata php8-session php8-pdo php8-pdo_pgsql php8-openssl php8-iconv php8-exif php8-dom php8-pdo_mysql php8-zip php8-xml php8-xmlwriter php8-xmlreader php8-ctype php8-gd php8-zlib php8-simplexml php8-curl php8-fileinfo php8-ldap php8-mysqli php8-posix php8-phar php8-pecl-imagick php8-gmp php8-bcmath
 
 RUN cp /usr/share/zoneinfo/America/Chihuahua /etc/localtime
 RUN echo "America/Chihuahua" >/etc/timezone
@@ -13,5 +12,5 @@ RUN apk del tzdata
 RUN rm -rf /var/cache/apk
 
 
-cmd ["/usr/sbin/php-fpm7"]
+cmd ["/usr/sbin/php-fpm8", "-F"]
 
